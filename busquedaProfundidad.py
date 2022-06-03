@@ -4,11 +4,11 @@
 Bryan Alfredo Solórzano Montero
 '''
 
-from queue import Queue# Importación de libreria para usar la estructura FIFO (permite almacenar nodos)
+# from queue import Queue# Importación de libreria para usar la estructura FIFO (permite almacenar nodos) solo aplicable para la busqueda BFS
 
 '''
     Grafo:
-        Una clase para implementar una búsqueda BFS, la cual representara gráficas.
+        Una clase para implementar DFS, la cual representara gráficas.
         Con la ayuda de matrices de adyacencia.  
 '''
 
@@ -150,6 +150,8 @@ class Grafo: # Clase para aplciar los grafos
         for clave in self.g_adjuntar_lista.keys(): # 
             print(f'nodo{clave}: {self.g_adjuntar_lista[clave]}') 
 
+    '''
+    # En caso de querer tener como referencia otro de los mejores metodos para la busqueda y recorrido de grafos
     # Busqueda por anchura
     def busqueda_amplitud(self, inicio_nodo): 
         visitado = set()
@@ -168,14 +170,19 @@ class Grafo: # Clase para aplciar los grafos
                     queue.put(siguiente_nodo) # Inmediatamente es encolado
                     visitado.add(siguiente_nodo) # Si entra es que no ha sido visitado y ahora ya esta identificado
     
+    '''
+    
     def busqueda_profundidad(self, inicio, objetivo, camino = [], visitado = set()):
-        camino.append(inicio)
-        visitado.add(inicio)
-        if inicio == objetivo:
+        camino.append(inicio) # Añade el nodo a la lista
+        visitado.add(inicio) # Seta el nodo como visitado
+        # print(visitado)
+        # print(camino)
+            # print(camino)
+        if inicio == objetivo: # D eser verdadero no hay para que hacer la busqueda 
             return camino
-        for (puerto, peso) in self.m_adj_list[inicio]:
+        for (puerto, peso) in self.g_adjuntar_lista[inicio]:
             if puerto not in visitado:
-                resultado = self.dfs(puerto, objetivo, camino, visitado) # Recursividad
+                resultado = self.busqueda_profundidad(puerto, objetivo, camino, visitado) # Recursividad
                 if resultado is not None:
                     return resultado
         camino.pop()
@@ -208,24 +215,49 @@ class Grafo: # Clase para aplciar los grafos
 
 
 if __name__ == "__main__": 
-    
-    g = Grafo(6, dirigido=False) # Instanicar un objeto
+
+    grafo1 = Grafo(5, dirigido=True) # Instanicar un objeto
+    grafo2 = Grafo(4)
+    grafo3 = Grafo(5, dirigido = False)
 
     # Agregar todos los bordes del gráfico a la instancia de Grafo
-    g.agregar_borde(0, 1)
-    g.agregar_borde(0, 2)
-    g.agregar_borde(1, 2)
-    g.agregar_borde(1, 4)
-    g.agregar_borde(2, 3)
-    g.agregar_borde(2, 4)
 
-    # Imprisión del grafo
-    g.imprimir_adjuntar_lista() 
+    # GRAFO 1
+    grafo1.agregar_borde(0, 1)
+    grafo1.agregar_borde(0, 2)
+    grafo1.agregar_borde(1, 2)
+    grafo1.agregar_borde(1, 4)
+    grafo1.agregar_borde(2, 3)
 
-    print ("Lo siguiente es el primer recorrido de ancho (empezando por el vértice 0)")
+    # GRAFO 2
+    grafo2.agregar_borde(0, 1)
+    grafo2.agregar_borde(0, 3)
+    grafo2.agregar_borde(1, 2)
+    grafo2.agregar_borde(1, 3)
 
-    # Busqueda por medio de un nodo
-    g.busqueda_amplitud(0, 0) 
-    print()
+    # GRAFO 3
+    grafo3.agregar_borde(0, 1)
+    grafo3.agregar_borde(1, 2)
+    grafo3.agregar_borde(3, 4)
+   
+    # # Imprisión del grafo
+    # print('GRAFO 1')
+    # grafo1.imprimir_adjuntar_lista() 
+    # print('GRAFO 2')
+    # grafo2.imprimir_adjuntar_lista() 
+    # print('GRAFO 3')
+    # grafo3.imprimir_adjuntar_lista() 
 
+    # Print adjacency list in the form node n: {(node, weight)}
+
+    ruta = []
+    print('GRAFO 1')
+    ruta = grafo1.busqueda_profundidad(0, 3)
+    print(f" La ruta transversal del nodo 0 al nodo 3 es {ruta}")
+    # print('GRAFO 2')
+    # ruta = grafo2.busqueda_profundidad(0, 3)
+    # print(f" La ruta transversal del nodo 0 al nodo 3 es {ruta}")
+    # print('GRAFO 3')
+    # ruta = grafo3.busqueda_profundidad(0, 2)
+    # print(f" La ruta transversal del nodo 0 al nodo 2 es {ruta}")
 ''' Finalización del Algoritmo'''
